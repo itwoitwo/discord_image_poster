@@ -62,17 +62,19 @@ def minimize_to_tray():
     icon.run()
 
 def create_tray_icon():
-    # nuitkaビルド対応: 実行ファイルのディレクトリからアイコン画像を取得
     exe_dir = os.path.dirname(sys.argv[0])
     icon_path = os.path.join(exe_dir, "tray_icon.png")
     try:
         image = Image.open(icon_path)
     except Exception:
-        # ファイルがない場合はデフォルトアイコン
         image = Image.new('RGB', (64, 64), color=(60, 60, 60))
         draw = ImageDraw.Draw(image)
         draw.ellipse((16, 16, 48, 48), fill=(114, 137, 218))
+    def on_show_window(icon, item):
+        root.deiconify()
+        icon.stop()
     icon = pystray.Icon("discord_image_poster", image, "Discord画像自動投稿", menu=pystray.Menu(
+        pystray.MenuItem("設定を表示", on_show_window),
         pystray.MenuItem("終了", on_exit)
     ))
     return icon
