@@ -114,7 +114,7 @@ def run_monitoring():
     # --- 親フォルダ監視Observerセットアップ ---
     if not os.path.isdir(BASE_WATCH_DIRECTORY):
         print(f"親フォルダが存在しません: {BASE_WATCH_DIRECTORY}")
-        return
+        return False
 
     # 最初の画像監視
     latest_folder = get_latest_year_month_folder()
@@ -122,6 +122,7 @@ def run_monitoring():
         start_image_observer(latest_folder)
     else:
         print("監視対象となる年月フォルダがありません。")
+        return False
 
     # 親フォルダ監視開始
     parent_handler = FolderCreateHandler()
@@ -141,6 +142,7 @@ def run_monitoring():
             image_observer.stop()
             image_observer.join()
         print("全ての監視を終了しました。")
+    return True
 
 if __name__ == "__main__":
     run_monitoring()
