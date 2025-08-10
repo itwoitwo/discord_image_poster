@@ -1,5 +1,6 @@
 import os
 import time
+import sys
 import requests
 import threading
 from watchdog.observers import Observer
@@ -111,7 +112,6 @@ class FolderCreateHandler(FileSystemEventHandler):
                 start_image_observer(latest_folder)
 
 if __name__ == "__main__":
-    import sys
 
     # --- 親フォルダ監視Observerセットアップ ---
     if not os.path.isdir(BASE_WATCH_DIRECTORY):
