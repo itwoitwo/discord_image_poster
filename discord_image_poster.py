@@ -32,7 +32,7 @@ def post_to_discord(file_path):
         time.sleep(1)
         with open(file_path, 'rb') as f:
             files = {'file': (filename, f)}
-            payload = {'content': f'New VRChat picture added: {filename}'}
+            payload = {'content': filename}
             response = requests.post(DISCORD_WEBHOOK_URL, files=files, data=payload)
             response.raise_for_status() # Raise an exception for bad status codes (4xx or 5xx)
         print(f"Successfully posted {filename} to Discord.")
