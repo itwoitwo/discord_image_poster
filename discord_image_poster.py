@@ -1,6 +1,8 @@
 import os
 import time
 import requests
+from PIL import Image
+import io
 import threading
 from watchdog.observers import Observer
 from watchdog.events import FileSystemEventHandler
@@ -25,15 +27,47 @@ def post_to_discord(file_path):
         print(f"File not found (possibly deleted quickly): {filename}")
         return
 
+    # 10MB超過判定
+    max_size = 10 * 1024 * 1024
+    file_size = os.path.getsize(file_path)
+    file_obj = None
+    send_filename = filename
+
+    if file_size > max_size:
+        print(f"{filename} is over 10MB. Compressing to JPEG in memory...")
+        try:
+            with Image.open(file_path) as img:
+                # RGB変換（PNG等の場合）
+                if img.mode in ("RGBA", "P"):
+                    img = img.convert("RGB")
+                quality = 95
+                while True:
+                    buf = io.BytesIO()
+                    img.save(buf, format="JPEG", quality=quality, optimize=True)
+                    buf.seek(0)
+                    if buf.getbuffer().nbytes <= max_size or quality <= 10:
+                        break
+                    quality -= 10
+                file_obj = buf
+                send_filename = os.path.splitext(filename)[0] + ".jpg"
+                print(f"Compressed {filename} to {buf.getbuffer().nbytes/1024/1024:.2f}MB (quality={quality})")
+        except Exception as e:
+            print(f"JPEG変換失敗: {e}")
+            return
+    else:
+        file_obj = open(file_path, 'rb')
+
     print(f"New image detected: {filename}. Posting to Discord...")
     try:
         # Wait a moment for the file to be fully written
         time.sleep(1)
-        with open(file_path, 'rb') as f:
-            files = {'file': (filename, f)}
-            payload = {'content': filename}
-            response = requests.post(DISCORD_WEBHOOK_URL, files=files, data=payload)
-            response.raise_for_status() # Raise an exception for bad status codes (4xx or 5xx)
+        files = {'file': (send_filename, file_obj)}
+        msg = filename
+        if file_size > max_size:
+            msg += "（Discordのファイルサイズ上限10MBを超えていたためjpgに変換されました。）"
+        payload = {'content': msg}
+        response = requests.post(DISCORD_WEBHOOK_URL, files=files, data=payload)
+        response.raise_for_status() # Raise an exception for bad status codes (4xx or 5xx)
         print(f"Successfully posted {filename} to Discord.")
         processed_files.add(filename)
     except requests.exceptions.RequestException as e:
@@ -42,6 +76,9 @@ def post_to_discord(file_path):
         print(f"Error: File disappeared before posting: {filename}")
     except Exception as e:
         print(f"An unexpected error occurred while processing {filename}: {e}")
+    finally:
+        if file_obj and not isinstance(file_obj, io.BytesIO):
+            file_obj.close()
 
 def check_webhook_url(url):
     """Discord Webhook URLが有効かどうかを判定する（テストメッセージ送信）"""
