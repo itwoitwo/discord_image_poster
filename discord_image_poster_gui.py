@@ -16,11 +16,16 @@ def start_monitoring():
     discord_image_poster.BASE_WATCH_DIRECTORY = folder
     discord_image_poster.DISCORD_WEBHOOK_URL = webhook
     def monitor_and_minimize():
-        result = discord_image_poster.run_monitoring()
-        if result:
-            minimize_to_tray()
-        else:
-            tk.messagebox.showerror("監視開始失敗", "監視対象フォルダが存在しないか、監視できませんでした。")
+        # Webhook URLの正当性チェック
+        if not discord_image_poster.check_webhook_url(webhook):
+            tk.messagebox.showerror("Webhookエラー", "Webhook URLが正しくありません。")
+            return
+        minimize_to_tray()
+        def run_monitor():
+            result = discord_image_poster.run_monitoring()
+            if not result:
+                tk.messagebox.showerror("監視開始失敗", "監視対象フォルダが存在しないか、監視できませんでした。")
+        threading.Thread(target=run_monitor, daemon=True).start()
     threading.Thread(target=monitor_and_minimize, daemon=True).start()
 
 def minimize_to_tray():

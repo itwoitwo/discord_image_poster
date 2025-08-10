@@ -43,6 +43,18 @@ def post_to_discord(file_path):
     except Exception as e:
         print(f"An unexpected error occurred while processing {filename}: {e}")
 
+def check_webhook_url(url):
+    """Discord Webhook URLが有効かどうかを判定する（テストメッセージ送信）"""
+    try:
+        response = requests.post(url, data={"content": "Webhook 設定完了！"})
+        if response.status_code == 204 or response.status_code == 200:
+            return True
+        else:
+            print(f"Webhook確認失敗: status={response.status_code}")
+            return False
+    except Exception as e:
+        print(f"Webhook確認エラー: {e}")
+        return False
 
 class NewImageHandler(FileSystemEventHandler):
     """Handles file system events."""
