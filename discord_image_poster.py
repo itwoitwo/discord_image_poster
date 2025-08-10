@@ -1,6 +1,5 @@
 import os
 import time
-import sys
 import requests
 import threading
 from watchdog.observers import Observer
@@ -111,12 +110,11 @@ class FolderCreateHandler(FileSystemEventHandler):
             if latest_folder:
                 start_image_observer(latest_folder)
 
-if __name__ == "__main__":
-
+def run_monitoring():
     # --- 親フォルダ監視Observerセットアップ ---
     if not os.path.isdir(BASE_WATCH_DIRECTORY):
         print(f"親フォルダが存在しません: {BASE_WATCH_DIRECTORY}")
-        sys.exit(1)
+        return
 
     # 最初の画像監視
     latest_folder = get_latest_year_month_folder()
@@ -143,3 +141,6 @@ if __name__ == "__main__":
             image_observer.stop()
             image_observer.join()
         print("全ての監視を終了しました。")
+
+if __name__ == "__main__":
+    run_monitoring()
