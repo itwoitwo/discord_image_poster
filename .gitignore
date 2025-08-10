@@ -1,0 +1,35 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+*.manifest
+*.spec
+
+# Nuitka
+*.build/
+*.dist/
+*.onefile-build
+
+# Virtual environments
+env/
+venv/
+ENV/
+.venv/
+.env/
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# Misc
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
