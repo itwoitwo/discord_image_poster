@@ -9,10 +9,10 @@ import pystray
 from PIL import Image, ImageDraw
 
 
-# 設定ファイルのパス（%APPDATA%\Roaming\discord_image_poster\config.json）
+# 設定ファイルのパス（%APPDATA%\Roaming\vrc_picture_to_discord\config.json）
 def get_config_path():
     appdata = os.getenv("APPDATA")
-    config_dir = os.path.join(appdata, "discord_image_poster")
+    config_dir = os.path.join(appdata, "vrc_picture_to_discord")
     os.makedirs(config_dir, exist_ok=True)
     return os.path.join(config_dir, "config.json")
 
@@ -73,7 +73,7 @@ def create_tray_icon():
     def on_show_window(icon, item):
         root.deiconify()
         icon.stop()
-    icon = pystray.Icon("discord_image_poster", image, "Discord画像自動投稿", menu=pystray.Menu(
+    icon = pystray.Icon("vrc_picture_to_discord", image, "Discord画像自動投稿", menu=pystray.Menu(
         pystray.MenuItem("設定を表示", on_show_window),
         pystray.MenuItem("終了", on_exit)
     ))
