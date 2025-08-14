@@ -63,7 +63,7 @@ def minimize_to_tray():
 
 def create_tray_icon():
     exe_dir = os.path.dirname(sys.argv[0])
-    icon_path = os.path.join(exe_dir, "tray_icon.png")
+    icon_path = os.path.join(exe_dir, "tray_icon.ico")
     try:
         image = Image.open(icon_path)
     except Exception:
@@ -73,7 +73,7 @@ def create_tray_icon():
     def on_show_window(icon, item):
         root.deiconify()
         icon.stop()
-    icon = pystray.Icon("vrc_picture_to_discord", image, "Discord画像自動投稿", menu=pystray.Menu(
+    icon = pystray.Icon("vrc_picture_to_discord", image, "VRC Picture to Discord", menu=pystray.Menu(
         pystray.MenuItem("設定を表示", on_show_window),
         pystray.MenuItem("終了", on_exit)
     ))
@@ -84,7 +84,8 @@ def on_exit(icon, item):
     root.destroy()
 
 root = tk.Tk()
-root.title("Discord画像自動投稿")
+root.title("VRC Picture to Discord")
+root.iconbitmap("tray_icon.ico")
 
 # 設定ファイル読込＆自動監視
 config_folder, config_webhook = load_config()

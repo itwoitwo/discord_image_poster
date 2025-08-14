@@ -1,2 +1,2 @@
 build commands:
-python -m nuitka --mingw64 --follow-imports --windows-console-mode=disable --standalone --enable-plugin=tk-inter --windows-product-name="Discord Image Poster GUI" --windows-file-description="VRC Picture to Discord" --windows-product-version=0.0.0.1 --windows-company-name="Iton Workshop" discord_image_poster_gui.py
+python -m nuitka --mingw64 --follow-imports --windows-console-mode=disable --standalone --enable-plugin=tk-inter --windows-product-name="VRC Picture to Discord" --windows-file-description="VRC Picture to Discord" --windows-product-version=1.0.0 --windows-company-name="Iton Workshop" --windows-icon-from-ico=tray_icon.ico --include-data-files=tray_icon.ico=tray_icon.ico --output-filename="VRC Picture to Discord" discord_image_poster_gui.py
