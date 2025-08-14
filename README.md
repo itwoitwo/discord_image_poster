@@ -1,2 +1,4 @@
+導入手順: https://docs.google.com/presentation/d/1M9t-lOdP9wYjcCHOqeE2-q_dKQUm9rluQHxG4ClnVig/edit?usp=sharing
+
 build commands:
 python -m nuitka --mingw64 --follow-imports --windows-console-mode=disable --standalone --enable-plugin=tk-inter --windows-product-name="VRC Picture to Discord" --windows-file-description="VRC Picture to Discord" --windows-product-version=1.0.0 --windows-company-name="Iton Workshop" --windows-icon-from-ico=tray_icon.ico --include-data-files=tray_icon.ico=tray_icon.ico --output-filename="VRC Picture to Discord" discord_image_poster_gui.py
